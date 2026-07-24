@@ -125,6 +125,7 @@ let state = {
   score: 0, lives: 3, level: 1,
   currentMode: 'learn',
   placed: new Set(),
+  answered: new Set(),
   memoryFlipped: [],
   memoryMatched: 0,
   memoryCards: [],
@@ -358,8 +359,14 @@ function renderListen(content, hint) {
 }
 
 function nextListenQuestion(content, hint) {
-  // ТОЛЬКО части тела, без функций!
-  const target = vocab[Math.floor(Math.random() * vocab.length)];
+  // Filter out already answered items
+  const available = vocab.filter(v => !state.answered.has('listen_' + v.part));
+  if (available.length === 0) {
+    content.innerHTML = `<p class="intro-text">🎉 Bravo! You answered all questions correctly!<br><button class="btn" onclick="state.answered.clear(); renderMode();">🔄 Play Again</button></p>`;
+    hint.innerHTML = '💡 All questions answered!';
+    return;
+  }
+  const target = available[Math.floor(Math.random() * available.length)];
   listenTarget = target;
   
   content.innerHTML = `
@@ -374,6 +381,7 @@ function nextListenQuestion(content, hint) {
   attachClownHandlers(content, (part) => {
     if (part === listenTarget.part) {
       showFeedback('✅ Correct! ' + listenTarget.fr, true);
+      state.answered.add('listen_' + listenTarget.part);
       addScore(10);
       setTimeout(() => nextListenQuestion(content, hint), 1200);
     } else {
@@ -469,19 +477,29 @@ function renderSpeed(content, hint) {
   
   let currentTarget = null;
   const nextQuestion = () => {
+    // Filter out already answered items
+    const availableVocab = vocab.filter(v => !state.answered.has('speed_' + v.part));
+    const availableFunctions = functions.filter(f => !state.answered.has('speed_' + (f.singular || f.part)));
+    
+    if (availableVocab.length === 0 && availableFunctions.length === 0) {
+      document.getElementById('speed-prompt').textContent = '🎉 All answered! Score: ' + state.speedScore;
+      clearInterval(state.speedTimer);
+      return;
+    }
+    
     // 60% вопросов — действия, 40% — просто слова
-    const useFunction = Math.random() > 0.4;
+    const useFunction = Math.random() > 0.4 && availableFunctions.length > 0;
     
     if (useFunction) {
-      const f = functions[Math.floor(Math.random() * functions.length)];
+      const f = availableFunctions[Math.floor(Math.random() * availableFunctions.length)];
       // ИСПРАВЛЕНО: правильно сопоставляем singular/part
       const targetPart = f.singular || f.part;
-      currentTarget = { type: 'function', part: targetPart, text: f.func };
+      currentTarget = { type: 'function', part: targetPart, text: f.func, key: 'speed_' + targetPart };
       document.getElementById('speed-prompt').innerHTML = `Qu'est-ce qu'on utilise<br><b>${f.func}</b>?`;
       speak(`Qu'est-ce qu'on utilise ${f.func}?`);
     } else {
-      const v = vocab[Math.floor(Math.random() * vocab.length)];
-      currentTarget = { type: 'vocab', part: v.part, text: v.fr };
+      const v = availableVocab[Math.floor(Math.random() * availableVocab.length)];
+      currentTarget = { type: 'vocab', part: v.part, text: v.fr, key: 'speed_' + v.part };
       document.getElementById('speed-prompt').textContent = 'Où est... ' + v.fr + ' ?';
       speak(v.fr);
     }
@@ -494,6 +512,7 @@ function renderSpeed(content, hint) {
     // ИСПРАВЛЕНО: проверяем совпадение правильно
     const correct = part === currentTarget.part;
     if (correct) {
+      state.answered.add(currentTarget.key);
       state.speedScore++;
       document.getElementById('speed-score').textContent = state.speedScore;
       addScore(3);
@@ -564,18 +583,28 @@ function rollDice() {
 }
 
 function askBoardQuestion(roll) {
-  const useFunction = Math.random() > 0.4;
+  // Filter out already answered items
+  const availableVocab = vocab.filter(v => !state.answered.has('board_' + v.part));
+  const availableFunctions = functions.filter(f => !state.answered.has('board_' + (f.singular || f.part)));
+  
+  if (availableVocab.length === 0 && availableFunctions.length === 0) {
+    const div = document.getElementById('board-question');
+    div.innerHTML = `<p style="color:#2e7d32;font-size:18px;">🎉 All questions answered!<br><button class="btn" onclick="state.answered.clear(); renderBoard(document.getElementById('game-content'), document.getElementById('hint'));">🔄 Play Again</button></p>`;
+    return;
+  }
+  
+  const useFunction = Math.random() > 0.4 && availableFunctions.length > 0;
   let q, correct, options, correctLabel;
   
   if (useFunction) {
-    const f = functions[Math.floor(Math.random() * functions.length)];
+    const f = availableFunctions[Math.floor(Math.random() * availableFunctions.length)];
     q = `${f.func} — c'est... ?`;
     correct = f.singular || f.part;
     const allParts = functions.map(x => x.singular || x.part);
     options = [correct, ...allParts.filter(x => x !== correct).slice(0, 2)];
     correctLabel = vocab.find(v => v.part === correct)?.fr || correct;
   } else {
-    const v = vocab[Math.floor(Math.random() * vocab.length)];
+    const v = availableVocab[Math.floor(Math.random() * availableVocab.length)];
     const qType = Math.random() > 0.5;
     if (qType) {
       q = `Comment dit-on "${v.en}" en français?`;
@@ -609,6 +638,13 @@ function askBoardQuestion(roll) {
     btn.addEventListener('click', () => {
       if (btn.dataset.val === correct) {
         showFeedback('✅ Correct!', true);
+        // Track answered question
+        if (useFunction) {
+          state.answered.add('board_' + correct);
+        } else {
+          const matchedVocab = vocab.find(v => v.part === correct || v.en === correct);
+          if (matchedVocab) state.answered.add('board_' + matchedVocab.part);
+        }
         const word = vocab.find(v => v.part === correct) || vocab.find(v => v.en === correct);
         if (word) speak(word.fr);
         state.boardPos = Math.min(state.boardTotal - 1, state.boardPos + roll);
