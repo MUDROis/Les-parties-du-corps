@@ -2,45 +2,45 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>🤡 Le Clown Rigolo — French Body Parts</title>
+<title>👽 Zorglub l'Alien — French Body Parts</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive, sans-serif; }
-  body { background: linear-gradient(135deg, #ffe0b2, #fff9c4); min-height: 100vh; padding: 15px; }
-  .header { display: flex; justify-content: space-between; align-items: center; background: #ff7043; color: white; padding: 12px 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 0 #d84315; }
+  body { background: linear-gradient(135deg, #1a237e, #4a148c, #880e4f); min-height: 100vh; padding: 15px; color: white; }
+  .header { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: white; padding: 12px 20px; border-radius: 15px; margin-bottom: 15px; border: 2px solid rgba(255,255,255,0.2); }
   .header h1 { font-size: 24px; }
   .stats { display: flex; gap: 15px; font-size: 18px; }
-  .progress-bar { background: #ffccbc; height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: 15px; }
-  .progress-fill { background: linear-gradient(90deg, #66bb6a, #43a047); height: 100%; width: 0%; transition: width 0.5s; }
+  .progress-bar { background: rgba(255,255,255,0.2); height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: 15px; }
+  .progress-fill { background: linear-gradient(90deg, #00e676, #00c853); height: 100%; width: 0%; transition: width 0.5s; }
   .modes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; justify-content: center; }
-  .mode-btn { padding: 10px 16px; border: none; border-radius: 20px; background: white; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 3px 0 #bdbdbd; transition: all 0.2s; }
-  .mode-btn:hover { transform: translateY(-2px); }
-  .mode-btn.active { background: #ffd54f; box-shadow: 0 3px 0 #f9a825; }
-  .game-area { background: white; border-radius: 20px; padding: 20px; min-height: 500px; box-shadow: 0 6px 0 #e0e0e0; position: relative; }
-  .hint { background: #e3f2fd; padding: 10px 15px; border-radius: 10px; margin-top: 10px; font-size: 14px; color: #1565c0; }
+  .mode-btn { padding: 10px 16px; border: none; border-radius: 20px; background: rgba(255,255,255,0.2); cursor: pointer; font-size: 14px; font-weight: bold; border: 2px solid rgba(255,255,255,0.3); transition: all 0.2s; color: white; }
+  .mode-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.3); }
+  .mode-btn.active { background: #00e676; color: #1a237e; box-shadow: 0 0 20px #00e676; }
+  .game-area { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 20px; padding: 20px; min-height: 500px; border: 2px solid rgba(255,255,255,0.1); position: relative; }
+  .hint { background: rgba(0,230,118,0.2); padding: 10px 15px; border-radius: 10px; margin-top: 10px; font-size: 14px; color: #00e676; border: 1px solid rgba(0,230,118,0.3); }
   .feedback { position: absolute; top: 20px; right: 20px; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 18px; opacity: 0; transition: opacity 0.3s; z-index: 10; }
   .feedback.show { opacity: 1; }
-  .feedback.correct { background: #c8e6c9; color: #2e7d32; }
-  .feedback.wrong { background: #ffcdd2; color: #c62828; }
+  .feedback.correct { background: #00e676; color: #1a237e; }
+  .feedback.wrong { background: #ff5252; color: white; }
 
-  .clown-container { display: flex; justify-content: center; margin: 20px 0; }
+  .alien-container { display: flex; justify-content: center; margin: 20px 0; }
   svg { max-width: 400px; height: auto; }
   .body-part { cursor: pointer; transition: all 0.2s; }
-  .body-part:hover { filter: brightness(1.15); }
+  .body-part:hover { filter: brightness(1.3) drop-shadow(0 0 10px rgba(0,230,118,0.8)); }
   .body-part.highlight { animation: pulse 0.6s infinite; }
-  @keyframes pulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.5); stroke: #ffeb3b; stroke-width: 3; } }
+  @keyframes pulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.5); stroke: #00e676; stroke-width: 3; } }
 
   .labels-pool { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px; }
-  .label { padding: 8px 14px; background: #fff59d; border: 2px dashed #f9a825; border-radius: 10px; cursor: grab; font-weight: bold; user-select: none; }
+  .label { padding: 8px 14px; background: rgba(0,230,118,0.2); border: 2px dashed #00e676; border-radius: 10px; cursor: grab; font-weight: bold; user-select: none; }
   .label.dragging { opacity: 0.5; }
-  .label.placed { background: #c8e6c9; border-color: #43a047; cursor: default; }
+  .label.placed { background: #00e676; color: #1a237e; cursor: default; }
 
   .memory-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; max-width: 600px; margin: 20px auto; }
-  .memory-card { aspect-ratio: 1; background: #ff7043; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px; font-weight: bold; color: white; text-align: center; padding: 5px; transition: background 0.3s, color 0.3s; }
-  .memory-card.flipped { background: #fff9c4; color: #333; }
-  .memory-card.matched { background: #a5d6a7; color: #1b5e20; cursor: default; }
+  .memory-card { aspect-ratio: 1; background: #7c4dff; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px; font-weight: bold; color: white; text-align: center; padding: 5px; transition: background 0.3s, color 0.3s; border: 2px solid rgba(255,255,255,0.3); }
+  .memory-card.flipped { background: rgba(255,255,255,0.9); color: #1a237e; }
+  .memory-card.matched { background: #00e676; color: #1a237e; cursor: default; }
 
-  .speed-prompt { text-align: center; font-size: 26px; margin: 20px 0; color: #d84315; font-weight: bold; min-height: 60px; }
-  .timer { font-size: 32px; text-align: center; color: #c62828; }
+  .speed-prompt { text-align: center; font-size: 26px; margin: 20px 0; color: #00e676; font-weight: bold; min-height: 60px; }
+  .timer { font-size: 32px; text-align: center; color: #ff5252; }
 
   .board-top { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 15px 0; }
   .dice { font-size: 60px; cursor: pointer; user-select: none; transition: transform 0.3s; }
@@ -48,26 +48,32 @@
   .dice.rolling { animation: roll 0.5s; }
   @keyframes roll { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
   .board { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-width: 600px; margin: 10px auto; }
-  .board-cell { aspect-ratio: 1; background: #ffe0b2; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; text-align: center; padding: 5px; position: relative; border: 2px solid #ffb74d; }
-  .board-cell.start { background: #a5d6a7; }
-  .board-cell.finish { background: #ffd54f; }
-  .player-token { position: absolute; width: 22px; height: 22px; background: #e53935; border-radius: 50%; border: 2px solid white; bottom: 3px; right: 3px; z-index: 2; }
-  .board-question { margin-top: 15px; text-align: center; background: #f5f5f5; padding: 15px; border-radius: 12px; min-height: 80px; }
+  .board-cell { aspect-ratio: 1; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; text-align: center; padding: 5px; position: relative; border: 2px solid rgba(255,255,255,0.2); }
+  .board-cell.start { background: rgba(0,230,118,0.3); }
+  .board-cell.finish { background: rgba(255,215,0,0.3); }
+  .player-token { position: absolute; width: 22px; height: 22px; background: #00e676; border-radius: 50%; border: 2px solid white; bottom: 3px; right: 3px; z-index: 2; box-shadow: 0 0 10px #00e676; }
+  .board-question { margin-top: 15px; text-align: center; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; min-height: 80px; border: 1px solid rgba(255,255,255,0.2); }
 
-  .btn { padding: 12px 24px; background: #42a5f5; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #1976d2; margin: 5px; }
+  .btn { padding: 12px 24px; background: #00e676; color: #1a237e; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #00c853; margin: 5px; }
   .btn:hover { transform: translateY(-2px); }
-  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1976d2; }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #00c853; }
   .btn-option { padding: 10px 16px; font-size: 14px; }
 
-  .intro-text { text-align: center; font-size: 18px; color: #5d4037; margin: 15px 0; }
+  .intro-text { text-align: center; font-size: 18px; color: #b388ff; margin: 15px 0; }
+  
+  .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+  .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s infinite; }
+  @keyframes twinkle { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 </style>
 </head>
 <body>
 
+<div class="stars" id="stars"></div>
+
 <div class="header">
-  <h1>🤡 Le Clown Rigolo</h1>
+  <h1>👽 Zorglub l'Alien</h1>
   <div style="display:flex;gap:10px;align-items:center;">
-    <a href="alien.html" style="text-decoration:none;padding:8px 16px;background:#7c4dff;border-radius:10px;color:white;font-weight:bold;">👽 Alien Zorglub</a>
+    <a href="index.html" style="text-decoration:none;padding:8px 16px;background:#ff7043;border-radius:10px;color:white;font-weight:bold;">🤡 Clown Rigolo</a>
     <div class="stats">
       <span>⭐ <span id="score">0</span></span>
       <span>❤️ <span id="lives">3</span></span>
@@ -90,34 +96,50 @@
 <div class="game-area">
   <div class="feedback" id="feedback"></div>
   <div id="game-content"></div>
-  <div class="hint" id="hint">Hover over the clown to learn the words!</div>
+  <div class="hint" id="hint">Hover over Zorglub to learn the words!</div>
 </div>
 
 <script>
-// ===== VOCABULARY =====
+// ===== STARS BACKGROUND =====
+function createStars() {
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 50; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.width = Math.random() * 3 + 1 + 'px';
+    star.style.height = star.style.width;
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 2 + 's';
+    container.appendChild(star);
+  }
+}
+createStars();
+
+// ===== VOCABULARY — ALIEN BODY PARTS =====
 const vocab = [
-  { fr: 'une tête', en: 'head', part: 'tete', emoji: '🗣️' },
-  { fr: 'un visage', en: 'face', part: 'visage', emoji: '😊' },
-  { fr: 'les cheveux', en: 'hair', part: 'cheveux', emoji: '💇' },
-  { fr: 'les yeux', en: 'eyes', part: 'yeux', emoji: '👀' },
-  { fr: 'une joue', en: 'cheek', part: 'joue', emoji: '🤗' },
-  { fr: 'un nez', en: 'nose', part: 'nez', emoji: '👃' },
-  { fr: 'une oreille', en: 'ear', part: 'oreille', emoji: '👂' },
-  { fr: 'une bouche', en: 'mouth', part: 'bouche', emoji: '👄' },
-  { fr: 'un bras', en: 'arm', part: 'bras', emoji: '💪' },
-  { fr: 'une main', en: 'hand', part: 'main', emoji: '✋' },
-  { fr: 'une jambe', en: 'leg', part: 'jambe', emoji: '🦵' },
-  { fr: 'un pied', en: 'foot', part: 'pied', emoji: '🦶' }
+  { fr: 'la tête', en: 'head', part: 'tete', emoji: '👽' },
+  { fr: 'le visage', en: 'face', part: 'visage', emoji: '🟢' },
+  { fr: 'les yeux', en: 'eyes (3!)', part: 'yeux', emoji: '👁️' },
+  { fr: 'les antennes', en: 'antennae', part: 'antennes', emoji: '📡' },
+  { fr: 'la bouche', en: 'mouth', part: 'bouche', emoji: '👄' },
+  { fr: 'les bras', en: 'arms (4!)', part: 'bras', emoji: '💪' },
+  { fr: 'les mains', en: 'hands (4!)', part: 'mains', emoji: '🖐️' },
+  { fr: 'le ventre', en: 'belly', part: 'ventre', emoji: '🫃' },
+  { fr: 'les tentacules', en: 'tentacles', part: 'tentacules', emoji: '🦑' },
+  { fr: 'les pieds', en: 'feet', part: 'pieds', emoji: '🦶' },
+  { fr: 'les cornes', en: 'horns', part: 'cornes', emoji: '🐉' },
+  { fr: 'la queue', en: 'tail', part: 'queue', emoji: '🐾' }
 ];
 
 const functions = [
-  { part: 'nez', func: 'pour sentir', en: 'to smell' },
-  { part: 'yeux', func: 'pour regarder et voir', en: 'to look and see' },
-  { part: 'mains', func: 'pour écrire, peindre et applaudir', en: 'to write, paint and clap', singular: 'main' },
-  { part: 'pieds', func: 'pour courir, marcher et sauter', en: 'to run, walk and jump', singular: 'pied' },
-  { part: 'bouche', func: 'pour manger, boire et rire', en: 'to eat, drink and laugh' },
-  { part: 'tête', func: 'pour penser', en: 'to think', singular: 'tete' },
-  { part: 'oreilles', func: 'pour écouter et parler', en: 'to listen and speak', singular: 'oreille' }
+  { part: 'yeux', func: 'pour voir dans le noir', en: 'to see in the dark' },
+  { part: 'antennes', func: 'pour capter les ondes', en: 'to catch waves' },
+  { part: 'bras', func: 'pour attraper les objets', en: 'to catch objects', singular: 'bras' },
+  { part: 'tentacules', func: 'pour nager dans l\'espace', en: 'to swim in space' },
+  { part: 'bouche', func: 'pour manger des étoiles', en: 'to eat stars' },
+  { part: 'cornes', func: 'pour briller la nuit', en: 'to glow at night' },
+  { part: 'queue', func: 'pour s\'équilibrer', en: 'to balance' }
 ];
 
 // ===== STATE =====
@@ -135,74 +157,100 @@ let state = {
   boardTotal: 20
 };
 
-// ===== SVG CLOWN =====
-function getClownSVG(highlightPart = null) {
+// ===== SVG ALIEN =====
+function getAlienSVG(highlightPart = null) {
   const hl = (id) => highlightPart === id ? 'highlight' : '';
   return `
-  <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
-    <g class="body-part ${hl('cheveux')}" data-part="cheveux">
-      <circle cx="100" cy="90" r="25" fill="#ff8a65"/>
-      <circle cx="200" cy="90" r="25" fill="#ff8a65"/>
-      <circle cx="90" cy="120" r="20" fill="#ff8a65"/>
-      <circle cx="210" cy="120" r="20" fill="#ff8a65"/>
+  <svg viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
+    <!-- Antennae -->
+    <g class="body-part ${hl('antennes')}" data-part="antennes">
+      <line x1="120" y1="60" x2="80" y2="20" stroke="#00e676" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="80" cy="15" r="8" fill="#00e676"/>
+      <line x1="180" y1="60" x2="220" y2="20" stroke="#00e676" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="220" cy="15" r="8" fill="#00e676"/>
     </g>
     
+    <!-- Horns -->
+    <g class="body-part ${hl('cornes')}" data-part="cornes">
+      <path d="M 100 70 L 70 30 L 80 70 Z" fill="#ff9800"/>
+      <path d="M 200 70 L 230 30 L 220 70 Z" fill="#ff9800"/>
+    </g>
+    
+    <!-- Head -->
     <circle class="body-part ${hl('tete')}" data-part="tete"
-            cx="150" cy="110" r="55"
-            fill="#ffccbc" stroke="#ffab91" stroke-width="12"
-            opacity="0.9"/>
-    <circle cx="150" cy="110" r="48" fill="#ffccbc" pointer-events="none"/>
+            cx="150" cy="100" r="60"
+            fill="#4caf50" stroke="#2e7d32" stroke-width="4"/>
     
-    <circle class="body-part ${hl('visage')}" data-part="visage"
-            cx="150" cy="115" r="40"
-            fill="#ffe0b2" stroke="#ff8a65" stroke-width="2" stroke-dasharray="3"/>
+    <!-- Face area -->
+    <ellipse class="body-part ${hl('visage')}" data-part="visage"
+             cx="150" cy="105" rx="45" ry="40"
+             fill="#66bb6a" stroke="#43a047" stroke-width="2"/>
     
+    <!-- Three Eyes -->
     <g class="body-part ${hl('yeux')}" data-part="yeux">
-      <circle cx="135" cy="105" r="6" fill="white"/><circle cx="135" cy="105" r="3" fill="black"/>
-      <circle cx="165" cy="105" r="6" fill="white"/><circle cx="165" cy="105" r="3" fill="black"/>
+      <circle cx="120" cy="95" r="12" fill="white" stroke="#333" stroke-width="2"/>
+      <circle cx="120" cy="95" r="6" fill="#e91e63"/>
+      <circle cx="180" cy="95" r="12" fill="white" stroke="#333" stroke-width="2"/>
+      <circle cx="180" cy="95" r="6" fill="#e91e63"/>
+      <circle cx="150" cy="80" r="10" fill="white" stroke="#333" stroke-width="2"/>
+      <circle cx="150" cy="80" r="5" fill="#2196f3"/>
     </g>
     
-    <g class="body-part ${hl('joue')}" data-part="joue">
-      <circle cx="120" cy="125" r="8" fill="#f48fb1" opacity="0.7"/>
-      <circle cx="180" cy="125" r="8" fill="#f48fb1" opacity="0.7"/>
-    </g>
+    <!-- Mouth -->
+    <ellipse class="body-part ${hl('bouche')}" data-part="bouche"
+             cx="150" cy="130" rx="15" ry="8"
+             fill="#f44336" stroke="#c62828" stroke-width="2"/>
     
-    <circle class="body-part ${hl('nez')}" data-part="nez" cx="150" cy="120" r="10" fill="#e53935"/>
+    <!-- Two Mouths (alien feature!) -->
+    <ellipse cx="130" cy="145" rx="8" ry="5" fill="#f44336" opacity="0.7"/>
+    <ellipse cx="170" cy="145" rx="8" ry="5" fill="#f44336" opacity="0.7"/>
     
-    <g class="body-part ${hl('oreille')}" data-part="oreille">
-      <ellipse cx="100" cy="110" rx="8" ry="12" fill="#ffab91"/>
-      <ellipse cx="200" cy="110" rx="8" ry="12" fill="#ffab91"/>
-    </g>
+    <!-- Body/Belly -->
+    <ellipse class="body-part ${hl('ventre')}" data-part="ventre"
+             cx="150" cy="200" rx="50" ry="45"
+             fill="#4caf50" stroke="#2e7d32" stroke-width="3"/>
+    <ellipse cx="150" cy="200" rx="35" ry="30" fill="#66bb6a"/>
+    <circle cx="150" cy="195" r="8" fill="#ffeb3b"/>
     
-    <ellipse class="body-part ${hl('bouche')}" data-part="bouche" 
-             cx="150" cy="140" rx="18" ry="8" 
-             fill="#ff5252" stroke="#c62828" stroke-width="2"/>
-    
-    <path d="M 110 70 L 150 30 L 190 70 Z" fill="#66bb6a" pointer-events="none"/>
-    <ellipse cx="150" cy="70" rx="50" ry="8" fill="#43a047" pointer-events="none"/>
-    
-    <rect x="120" y="160" width="60" height="80" fill="#ffd54f" rx="10" pointer-events="none"/>
-    <circle cx="150" cy="190" r="10" fill="#e91e63" pointer-events="none"/>
-    
+    <!-- 4 Arms -->
     <g class="body-part ${hl('bras')}" data-part="bras">
-      <rect x="70" y="170" width="50" height="18" fill="#4fc3f7" rx="9" transform="rotate(-20 95 179)"/>
-      <rect x="180" y="170" width="50" height="18" fill="#4fc3f7" rx="9" transform="rotate(20 205 179)"/>
+      <!-- Top arms -->
+      <ellipse cx="60" cy="180" rx="30" ry="10" fill="#4caf50" transform="rotate(-20 60 180)"/>
+      <ellipse cx="240" cy="180" rx="30" ry="10" fill="#4caf50" transform="rotate(20 240 180)"/>
+      <!-- Bottom arms -->
+      <ellipse cx="55" cy="220" rx="25" ry="8" fill="#4caf50" transform="rotate(-30 55 220)"/>
+      <ellipse cx="245" cy="220" rx="25" ry="8" fill="#4caf50" transform="rotate(30 245 220)"/>
     </g>
     
-    <g class="body-part ${hl('main')}" data-part="main">
-      <circle cx="65" cy="195" r="12" fill="#ffccbc"/>
-      <circle cx="235" cy="195" r="12" fill="#ffccbc"/>
+    <!-- 4 Hands -->
+    <g class="body-part ${hl('mains')}" data-part="mains">
+      <circle cx="30" cy="175" r="12" fill="#81c784"/>
+      <circle cx="270" cy="175" r="12" fill="#81c784"/>
+      <circle cx="25" cy="230" r="10" fill="#81c784"/>
+      <circle cx="275" cy="230" r="10" fill="#81c784"/>
     </g>
     
-    <g class="body-part ${hl('jambe')}" data-part="jambe">
-      <rect x="125" y="240" width="20" height="90" fill="#7e57c2" rx="5"/>
-      <rect x="155" y="240" width="20" height="90" fill="#7e57c2" rx="5"/>
+    <!-- Tentacles instead of legs -->
+    <g class="body-part ${hl('tentacules')}" data-part="tentacules">
+      <path d="M 120 240 Q 100 300 80 350 Q 70 370 90 380" fill="none" stroke="#4caf50" stroke-width="12" stroke-linecap="round"/>
+      <path d="M 180 240 Q 200 300 220 350 Q 230 370 210 380" fill="none" stroke="#4caf50" stroke-width="12" stroke-linecap="round"/>
+      <path d="M 140 245 Q 130 310 110 370 Q 100 390 120 400" fill="none" stroke="#4caf50" stroke-width="10" stroke-linecap="round"/>
+      <path d="M 160 245 Q 170 310 190 370 Q 200 390 180 400" fill="none" stroke="#4caf50" stroke-width="10" stroke-linecap="round"/>
     </g>
     
-    <g class="body-part ${hl('pied')}" data-part="pied">
-      <ellipse cx="135" cy="340" rx="22" ry="10" fill="#ffeb3b"/>
-      <ellipse cx="165" cy="340" rx="22" ry="10" fill="#ffeb3b"/>
+    <!-- Feet at tentacle ends -->
+    <g class="body-part ${hl('pieds')}" data-part="pieds">
+      <ellipse cx="90" cy="385" rx="15" ry="8" fill="#81c784"/>
+      <ellipse cx="210" cy="385" rx="15" ry="8" fill="#81c784"/>
+      <ellipse cx="120" cy="405" rx="12" ry="6" fill="#81c784"/>
+      <ellipse cx="180" cy="405" rx="12" ry="6" fill="#81c784"/>
     </g>
+    
+    <!-- Tail -->
+    <path class="body-part ${hl('queue')}" data-part="queue"
+          d="M 150 245 Q 150 300 200 320 Q 250 340 280 300"
+          fill="none" stroke="#4caf50" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="280" cy="295" r="8" fill="#ff9800"/>
   </svg>`;
 }
 
@@ -266,13 +314,13 @@ function renderMode() {
 function renderLearn(content, hint) {
   hint.innerHTML = '💡 Clique sur une partie du corps pour entendre le mot!';
   content.innerHTML = `
-    <p class="intro-text">Explore le clown! 🤡</p>
-    <div class="clown-container">${getClownSVG()}</div>
+    <p class="intro-text">Explore Zorglub! 👽</p>
+    <div class="alien-container">${getAlienSVG()}</div>
     <div class="labels-pool">
-      ${vocab.map(v => `<span class="label">${v.fr} <small style="color:#666">(${v.en})</small></span>`).join('')}
+      ${vocab.map(v => `<span class="label">${v.fr} <small style="color:#aaa">(${v.en})</small></span>`).join('')}
     </div>
   `;
-  attachClownHandlers(content, (part) => {
+  attachAlienHandlers(content, (part) => {
     const word = vocab.find(v => v.part === part);
     if (word) { speak(word.fr); showFeedback(word.fr + ' = ' + word.en, true); }
   }, (part) => {
@@ -287,8 +335,8 @@ function renderDrag(content, hint) {
   const shuffled = [...vocab].sort(() => Math.random() - 0.5);
   state.placed = new Set();
   content.innerHTML = `
-    <p class="intro-text">Glisse les mots sur le clown!</p>
-    <div class="clown-container">${getClownSVG()}</div>
+    <p class="intro-text">Glisse les mots sur Zorglub!</p>
+    <div class="alien-container">${getAlienSVG()}</div>
     <div class="labels-pool" id="labels-pool">
       ${shuffled.map(v => `<div class="label" draggable="true" data-part="${v.part}">${v.fr}</div>`).join('')}
     </div>
@@ -313,13 +361,13 @@ function setupDragDrop() {
     });
     lbl.addEventListener('dragend', () => lbl.classList.remove('dragging'));
   });
-  attachClownHandlers(document.getElementById('game-content'), null, null, true);
+  attachAlienHandlers(document.getElementById('game-content'), null, null, true);
 }
 
-function attachClownHandlers(container, onClick, onHover, dragMode = false) {
+function attachAlienHandlers(container, onClick, onHover, dragMode = false) {
   container.querySelectorAll('.body-part').forEach(el => {
     if (dragMode) {
-      el.addEventListener('dragover', e => { e.preventDefault(); el.style.filter = 'brightness(1.3)'; });
+      el.addEventListener('dragover', e => { e.preventDefault(); el.style.filter = 'brightness(1.3) drop-shadow(0 0 10px rgba(0,230,118,0.8))'; });
       el.addEventListener('dragleave', () => { el.style.filter = ''; });
       el.addEventListener('drop', e => {
         e.preventDefault();
@@ -350,7 +398,7 @@ function attachClownHandlers(container, onClick, onHover, dragMode = false) {
   });
 }
 
-// ===== 3. LISTEN & CLICK — ИСПРАВЛЕНО: только части тела =====
+// ===== 3. LISTEN & CLICK =====
 let listenTarget = null;
 function renderListen(content, hint) {
   hint.innerHTML = '🔊 Listen and click the correct body part!';
@@ -358,20 +406,19 @@ function renderListen(content, hint) {
 }
 
 function nextListenQuestion(content, hint) {
-  // ТОЛЬКО части тела, без функций!
   const target = vocab[Math.floor(Math.random() * vocab.length)];
   listenTarget = target;
   
   content.innerHTML = `
     <p class="intro-text">🔊 Écoute et clique!<br><small>(Listen and click!)</small></p>
     <button class="btn" id="play-btn">🔊 Réécouter</button>
-    <div class="clown-container">${getClownSVG()}</div>
+    <div class="alien-container">${getAlienSVG()}</div>
   `;
   
   document.getElementById('play-btn').addEventListener('click', () => speak(target.fr));
   setTimeout(() => speak(target.fr), 400);
   
-  attachClownHandlers(content, (part) => {
+  attachAlienHandlers(content, (part) => {
     if (part === listenTarget.part) {
       showFeedback('✅ Correct! ' + listenTarget.fr, true);
       addScore(10);
@@ -453,7 +500,7 @@ function renderMemory(content, hint) {
   });
 }
 
-// ===== 5. SPEED ROUND — ИСПРАВЛЕНО: с действиями + правильное сопоставление =====
+// ===== 5. SPEED ROUND =====
 function renderSpeed(content, hint) {
   hint.innerHTML = '⚡ 60 seconds! Answer as many as you can!';
   state.speedTime = 60;
@@ -463,18 +510,16 @@ function renderSpeed(content, hint) {
     <p class="intro-text">⚡ Rapid!</p>
     <div class="timer">⏱️ <span id="timer-val">60</span>s</div>
     <div class="speed-prompt" id="speed-prompt">Prêt?</div>
-    <div class="clown-container">${getClownSVG()}</div>
+    <div class="alien-container">${getAlienSVG()}</div>
     <p style="text-align:center;">Score this round: <span id="speed-score">0</span></p>
   `;
   
   let currentTarget = null;
   const nextQuestion = () => {
-    // 60% вопросов — действия, 40% — просто слова
     const useFunction = Math.random() > 0.4;
     
     if (useFunction) {
       const f = functions[Math.floor(Math.random() * functions.length)];
-      // ИСПРАВЛЕНО: правильно сопоставляем singular/part
       const targetPart = f.singular || f.part;
       currentTarget = { type: 'function', part: targetPart, text: f.func };
       document.getElementById('speed-prompt').innerHTML = `Qu'est-ce qu'on utilise<br><b>${f.func}</b>?`;
@@ -489,9 +534,8 @@ function renderSpeed(content, hint) {
   
   setTimeout(nextQuestion, 800);
   
-  attachClownHandlers(content, (part) => {
+  attachAlienHandlers(content, (part) => {
     if (!currentTarget) return;
-    // ИСПРАВЛЕНО: проверяем совпадение правильно
     const correct = part === currentTarget.part;
     if (correct) {
       state.speedScore++;
@@ -538,7 +582,7 @@ function renderBoard(content, hint) {
     </div>
     
     <div class="board-question" id="board-question">
-      <p style="font-size:16px;color:#5d4037;">🎲 Click the dice to start!</p>
+      <p style="font-size:16px;color:#b388ff;">🎲 Click the dice to start!</p>
     </div>
   `;
   
@@ -596,7 +640,7 @@ function askBoardQuestion(roll) {
   
   const div = document.getElementById('board-question');
   div.innerHTML = `
-    <p style="font-size:18px;margin:10px;color:#d84315;font-weight:bold;">${q}</p>
+    <p style="font-size:18px;margin:10px;color:#00e676;font-weight:bold;">${q}</p>
     <div>${options.map(o => {
       const label = (useFunction || (q.includes('dit-on') && !q.includes('c\'est'))) 
         ? (vocab.find(v => v.part === o)?.fr || o) 
@@ -614,13 +658,13 @@ function askBoardQuestion(roll) {
         state.boardPos = Math.min(state.boardTotal - 1, state.boardPos + roll);
         addScore(8);
         updateBoardToken();
-        div.innerHTML = `<p style="color:#2e7d32;font-size:18px;">🎉 Avance de ${roll}! Position: ${state.boardPos}</p>`;
+        div.innerHTML = `<p style="color:#00e676;font-size:18px;">🎉 Avance de ${roll}! Position: ${state.boardPos}</p>`;
         if (state.boardPos === state.boardTotal - 1) {
           setTimeout(() => { alert('🏆 Bravo! You reached the finish! +30 bonus!'); addScore(30); }, 500);
         }
       } else {
         showFeedback('❌ Wrong! Stay here.', false);
-        div.innerHTML = `<p style="color:#c62828;font-size:16px;"> Mauvaise réponse. Réessaie au prochain tour!</p>`;
+        div.innerHTML = `<p style="color:#ff5252;font-size:16px;"> Mauvaise réponse. Réessaie au prochain tour!</p>`;
       }
     });
   });
